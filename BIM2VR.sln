@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BIM2VR", "BIM2VR\BIM2VR.csproj", "{20D6260B-F4AE-46F6-9B3E-6BE3BED0241A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20D6260B-F4AE-46F6-9B3E-6BE3BED0241A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D6260B-F4AE-46F6-9B3E-6BE3BED0241A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20D6260B-F4AE-46F6-9B3E-6BE3BED0241A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D6260B-F4AE-46F6-9B3E-6BE3BED0241A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {036591AB-1CF9-42CA-848D-18F444A708CC}
+	EndGlobalSection
+EndGlobal

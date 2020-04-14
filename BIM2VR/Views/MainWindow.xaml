@@ -1,0 +1,366 @@
+﻿<fluent:RibbonWindow x:Class="BIM2VR.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:xbim="http://schemas.Xbim.com/Presentation"
+        xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
+        xmlns:fluent="urn:fluent-ribbon"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:viewModels="clr-namespace:Xbim.Ifc.ViewModels;assembly=Xbim.Ifc"
+        xmlns:controls="clr-namespace:BIM2VR.Controls"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        WindowStartupLocation="CenterScreen"
+        Title="{Binding Title}" Height="600" Width="800">
+    <fluent:RibbonWindow.Resources>
+        <DataTemplate DataType="{x:Type viewModels:XbimModelViewModel}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" Text="{Binding Name}" FontWeight="Bold"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:SpatialViewModel}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <!--<Image Grid.Column="0" Source="/folder.png" Margin="0 0 4 0"/>-->
+                <TextBlock Grid.Column="1" Text="{Binding Name}" FontWeight="Bold"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:ContainedElementsViewModel}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <!--<Image Grid.Column="0" Source="/folder.png" Margin="0 0 4 0"/>-->
+                <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:IfcProductModelView}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <!--<Image Grid.Column="0" Source="/folder.png" Margin="0 0 4 0"/>-->
+                <TextBlock Grid.Column="1" Text="{Binding Name}"/>
+            </Grid>
+        </DataTemplate>
+        <Style x:Key="MenuButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Height" Value="100" />
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Border Name="MenuBorder" 
+                                    SnapsToDevicePixels="True" 
+                                    Background="{TemplateBinding Background}" 
+                                    BorderThickness="0" >
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter TargetName="MenuBorder" Property="Background" Value="Gainsboro" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MenuListBoxItem" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Margin" Value="5,3"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border x:Name="brd" Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Gainsboro"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </fluent:RibbonWindow.Resources>
+    <xctk:BusyIndicator IsBusy="{Binding BusyManager.IsBusy}" BusyContent="{Binding BusyManager}">
+        <xctk:BusyIndicator.BusyContentTemplate>
+            <DataTemplate>
+                <StackPanel Margin="0">
+                    <StackPanel Margin="4">
+                        <TextBlock FontWeight="DemiBold" Text="{Binding CurrentMessage}"/>
+                        <ProgressBar Margin="0 10 0 0" 
+                                     Height="15"
+                                     Minimum="{Binding Minimum}"
+                                     Maximum="{Binding Maximum}"
+                                     Value="{Binding CurrentValue}"/>
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+        </xctk:BusyIndicator.BusyContentTemplate>
+        <xctk:BusyIndicator.ProgressBarStyle>
+            <Style TargetType="ProgressBar">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </Style>
+        </xctk:BusyIndicator.ProgressBarStyle>
+        <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <fluent:Ribbon Grid.Row="0">
+            <!--Backstage-->
+            <fluent:Ribbon.Menu>
+                <fluent:Backstage CloseOnEsc="True">
+                    <fluent:BackstageTabControl>
+                        <fluent:BackstageTabItem Header="Импорт">
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" Margin="0 0 0 10" BorderThickness="0 0 0 1" BorderBrush="LightGray">
+                                    <WrapPanel>
+                                        <Button Style="{StaticResource MenuButton}">
+                                            <StackPanel>
+                                                <Image Width="64" Source="../Resources/Icons/ifc_format.png"/>
+                                                <TextBlock Margin="0 10 0 0" FontWeight="DemiBold" TextAlignment="Center" Foreground="Black" Text="Открыть модель"/>
+                                            </StackPanel>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <ei:CallMethodAction MethodName="ImportHandler" TargetObject="{Binding}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Button>
+                                    </WrapPanel>
+                                </Border>
+                                <StackPanel Grid.Row="1">
+                                    <TextBlock FontWeight="DemiBold" Text="Недавно открывавшиеся модели:"/>
+                                    <ListBox Margin="0 10 0 0"
+                                             ItemContainerStyle="{StaticResource MenuListBoxItem}"
+                                             ItemsSource="{Binding BimModelsMostRecentlyUsedManager.BimModels}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="PreviewMouseDown">
+                                                <ei:CallMethodAction MethodName="RecentModelClickHandler" TargetObject="{Binding}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ListBox>
+                                </StackPanel>
+                            </Grid>
+                        </fluent:BackstageTabItem>
+                    </fluent:BackstageTabControl>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Loaded">
+                            <ei:CallMethodAction MethodName="BackstageLoadedHandler" TargetObject="{Binding}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </fluent:Backstage>
+            </fluent:Ribbon.Menu>
+
+            <fluent:RibbonTabItem Header="Вид">
+                <fluent:RibbonGroupBox Header="Каркас">
+                    <fluent:Button Header="Отобразить" LargeIcon="../Resources/Icons/wireframe_on.png">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="ShowWireframeHandler" TargetObject="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </fluent:Button>
+                    <fluent:Button Header="Скрыть" LargeIcon="../Resources/Icons/wireframe_off.png">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="HideWireframeHandler" TargetObject="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+
+            <fluent:RibbonTabItem Header="Материалы">
+                <fluent:RibbonGroupBox Header="Настройка">
+                    <fluent:Button Header="Менеджер материалов" LargeIcon="../Resources/Icons/brush.png">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="OpenMaterialDispatcherHandler" TargetObject="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+
+                <fluent:RibbonTabItem Header="Визуализация">
+                <fluent:RibbonGroupBox Header="UE">
+                    <fluent:Button Header="Запустить визуализацию" LargeIcon="../Resources/Icons/vr.png">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:CallMethodAction MethodName="ShowVisualizer3DHandler" TargetObject="{Binding}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </fluent:Button>
+                </fluent:RibbonGroupBox>
+            </fluent:RibbonTabItem>
+
+            </fluent:Ribbon>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.75*"/>
+                <ColumnDefinition Width="0.25*"/>
+            </Grid.ColumnDefinitions>
+            <hx:Viewport3DX
+                x:Name="Viewport3Dx"
+                Grid.Column="0"
+                DataContext="{Binding View3DManager}"
+                BackgroundColor="White" 
+                TextBrush="Black" 
+                Camera="{Binding Camera}"
+                ZoomExtentsWhenLoaded="True"
+                CoordinateSystemLabelForeground="#434343"
+                EffectsManager="{Binding EffectsManager}" 
+                EnableSSAO="False" 
+                SSAOQuality="Low" 
+                SSAOIntensity="1.5" 
+                SSAOSamplingRadius="5"
+                MSAA="Four"
+                EnableOITRendering="True"
+                EnableDesignModeRendering="True"
+                EnableSwapChainRendering="False"
+                FXAALevel="Low"
+                IsShadowMappingEnabled="True" 
+                ShowFrameRate="False"
+                ModelUpDirection="{Binding UpDirection}" 
+                ShowCoordinateSystem="True" 
+                UseDefaultGestures="False">
+
+                <!--#region InputBindings-->
+
+                <hx:Viewport3DX.InputBindings>
+                    <KeyBinding Key="B" Command="hx:ViewportCommands.BackView" />
+                    <KeyBinding Key="F" Command="hx:ViewportCommands.FrontView" />
+                    <KeyBinding Key="U" Command="hx:ViewportCommands.TopView" />
+                    <KeyBinding Key="D" Command="hx:ViewportCommands.BottomView" />
+                    <KeyBinding Key="L" Command="hx:ViewportCommands.LeftView" />
+                    <KeyBinding Key="R" Command="hx:ViewportCommands.RightView" />
+                    <KeyBinding Command="hx:ViewportCommands.ZoomExtents" Gesture="Control+E" />
+                    <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="RightClick" />
+                    <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="LeftClick" />
+                </hx:Viewport3DX.InputBindings>
+
+                <!--#region Lighting-->
+
+                <hx:AmbientLight3D Color="{Binding AmbientLightColor}" />
+                <hx:DirectionalLight3D Direction="{Binding Camera.LookDirection}" Color="{Binding DirectionalLightColor}" />
+
+                <!--#endregion-->
+
+                <!--#region Model-->
+
+                <hx:ItemsModel3D ItemsSource="{Binding Model.Items}">
+                    <hx:ItemsModel3D.ItemTemplate>
+                        <DataTemplate>
+                            <hx:ItemsModel3D ItemsSource="{Binding Geometries}">
+                                <hx:ItemsModel3D.ItemTemplate>
+                                    <DataTemplate>
+                                        <hx:MeshGeometryModel3D 
+                                            Geometry="{Binding Geometry}" 
+                                            Material="{Binding Material}"
+                                            Transform="{Binding Transform}"
+                                            RenderWireframe="{Binding Path=DataContext.IsWireframeEnabled, RelativeSource={RelativeSource AncestorType={x:Type hx:Viewport3DX}}}"
+                                            WireframeColor="Aquamarine"/>
+                                    </DataTemplate>
+                                </hx:ItemsModel3D.ItemTemplate>
+                            </hx:ItemsModel3D>
+                        </DataTemplate>
+                    </hx:ItemsModel3D.ItemTemplate>
+                </hx:ItemsModel3D>
+
+                <!--#endregion-->
+
+                <!--#region Environment-->
+
+                <hx:ScreenQuadModel3D Texture="{Binding BackgroundTexture}" />
+
+                <!--#endregion-->
+
+                <hx:ItemsModel3D ItemsSource="{Binding SelectedItems}">
+                    <hx:ItemsModel3D.ItemTemplate>
+                        <DataTemplate>
+                            <hx:ItemsModel3D ItemsSource="{Binding Geometries}">
+                                <hx:ItemsModel3D.ItemTemplate>
+                                    <DataTemplate>
+                                        <hx:MeshGeometryModel3D 
+                                            CullMode="Back"
+                                            DepthBias="-100" 
+                                            IsHitTestVisible="False"
+                                            IsThrowingShadow="False"
+                                            Geometry="{Binding Geometry}" 
+                                            Material="{Binding Path=DataContext.HighlightMaterial, RelativeSource={RelativeSource AncestorType={x:Type hx:Viewport3DX}}}"
+                                            Transform="{Binding Transform}"/>
+                                    </DataTemplate>
+                                </hx:ItemsModel3D.ItemTemplate>
+                            </hx:ItemsModel3D>
+                        </DataTemplate>
+                    </hx:ItemsModel3D.ItemTemplate>
+                </hx:ItemsModel3D>
+
+
+                <hx:ItemsModel3D ItemsSource="{Binding SelectedGeometries}">
+                    <hx:ItemsModel3D.ItemTemplate>
+                        <DataTemplate>
+                            <hx:MeshGeometryModel3D 
+                                CullMode="Back"
+                                DepthBias="-100" 
+                                IsHitTestVisible="False"
+                                IsThrowingShadow="False"
+                                Geometry="{Binding Geometry}" 
+                                Material="{Binding Path=DataContext.HighlightMaterial, RelativeSource={RelativeSource AncestorType={x:Type hx:Viewport3DX}}}"
+                                Transform="{Binding Transform}"/>
+                        </DataTemplate>
+                    </hx:ItemsModel3D.ItemTemplate>
+                </hx:ItemsModel3D>
+
+
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <ei:CallMethodAction MethodName="ViewportLoadedHandler" TargetObject="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType={x:Type fluent:RibbonWindow}}}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </hx:Viewport3DX>
+            <controls:BimTreeView Grid.Column="1" Model="{Binding View3DManager.Model.Model}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TargetSelected">
+                        <ei:CallMethodAction MethodName="OnStructureElementSelected" TargetObject="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                </controls:BimTreeView>
+        </Grid>
+        <!--<fluent:StatusBar Grid.Row="2">
+            <fluent:StatusBarItem Value="150" HorizontalAlignment="Right">
+                <ProgressBar Margin="0 0 4 0" Height="16" Width="150"/>
+            </fluent:StatusBarItem>
+        </fluent:StatusBar>-->
+    </Grid>
+    </xctk:BusyIndicator>
+</fluent:RibbonWindow>

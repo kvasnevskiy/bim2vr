@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{20D6260B-F4AE-46F6-9B3E-6BE3BED0241A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BIM2VR</RootNamespace>
+    <AssemblyName>BIM2VR</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Controls\BitmapImageContainer.cs" />
+    <Compile Include="Controls\BitmapImageContainerPropertyEditor.xaml.cs">
+      <DependentUpon>BitmapImageContainerPropertyEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Models\BIM\BimGeometry3DModel.cs" />
+    <Compile Include="Models\Images\ImageManager.cs" />
+    <Compile Include="Models\Materials\BasicMaterialModel.cs" />
+    <Compile Include="Models\Materials\ColorMaterialModel.cs" />
+    <Compile Include="Models\Materials\MaterialType.cs" />
+    <Compile Include="Models\Materials\TextureModelEx.cs" />
+    <Compile Include="Models\Visualizer\Data\CommonParameters\RGBAParameter.cs" />
+    <Compile Include="Models\Visualizer\Data\MaterialSource\MaterialSourceData.cs" />
+    <Compile Include="Models\Visualizer\Data\MaterialSource\Attributes\VisualizerColorMaterialParameter.cs" />
+    <Compile Include="Models\Visualizer\Data\MaterialSource\Attributes\VisualizerMaterial.cs" />
+    <Compile Include="Models\Visualizer\Data\MaterialSource\Attributes\VisualizerMaterialParameter.cs" />
+    <Compile Include="Models\Visualizer\Data\MaterialSource\Attributes\VisualizerScalarMaterialParameter.cs" />
+    <Compile Include="Models\Visualizer\Data\MaterialSource\Attributes\VisualizerTextureMaterialParameter.cs" />
+    <Compile Include="Models\Visualizer\Data\MaterialSource\Attributes\VisualizerVector2DMaterialParameter.cs" />
+    <Compile Include="Models\Visualizer\Data\TextureSource\TextureDetailsData.cs" />
+    <Compile Include="Models\Visualizer\Data\TextureSource\TextureSourceData.cs" />
+    <Compile Include="ViewModels\BIM\BimGeometry3DViewModel.cs" />
+    <Compile Include="ViewModels\MaterialDispatcherWindowViewModel.cs" />
+    <Compile Include="ViewModels\Materials\BasicMaterialViewModel.cs" />
+    <Compile Include="ViewModels\Materials\ColorMaterialViewModel.cs" />
+    <Compile Include="ViewModels\Materials\MaterialViewCreator.cs" />
+    <Compile Include="ViewModels\Materials\MaterialViewModel.cs" />
+    <Compile Include="Views\MaterialDispatcherWindow.xaml.cs">
+      <DependentUpon>MaterialDispatcherWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Controls\BitmapImageContainerPropertyEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensions\MeshExtensions.cs" />
+    <Compile Include="Models\BIM\BimStore3DModel.cs" />
+    <Compile Include="Models\BIM\BimStoreItem3DModel.cs" />
+    <Compile Include="Models\Geometry\MeshModel.cs" />
+    <Compile Include="Models\Import\IImportManager.cs" />
+    <Compile Include="Models\Import\ImportManagerModel.cs" />
+    <Compile Include="Models\Materials\MaterialModelCreator.cs" />
+    <Compile Include="Models\Materials\MaterialModel.cs" />
+    <Compile Include="Models\Materials\IMaterialManager.cs" />
+    <Compile Include="Models\Materials\MaterialManagerModel.cs" />
+    <Compile Include="Models\Visualizer\Data\ConstructiveMesh\ConstructiveMeshData.cs" />
+    <Compile Include="Models\Visualizer\Data\GeometrySource\GeometrySourceData.cs" />
+    <Compile Include="Models\Visualizer\Data\Mesh\MeshData.cs" />
+    <Compile Include="Models\Visualizer\Data\CommonParameters\QuaternionParameter.cs" />
+    <Compile Include="Models\Visualizer\Data\CommonParameters\Vector2DParameter.cs" />
+    <Compile Include="Models\Visualizer\Data\CommonParameters\Vector3DParameter.cs" />
+    <Compile Include="Models\Visualizer\Data\SceneData.cs" />
+    <Compile Include="Models\Visualizer\Data\Transform\TransformData.cs" />
+    <Compile Include="Models\Visualizer\IVisualizerManager.cs" />
+    <Compile Include="Models\Visualizer\VisualizerManagerModel.cs" />
+    <Compile Include="Controls\BimTreeView.cs" />
+    <Compile Include="ViewModels\Busy\BusyManagerModel.cs" />
+    <Compile Include="ViewModels\Busy\IBusyManager.cs" />
+    <Compile Include="ViewModels\MRU\BimModelsMostRecentlyUsedManagerModel.cs" />
+    <Compile Include="ViewModels\MRU\IBimModelsMostRecentlyUsedManager.cs" />
+    <Compile Include="Models\View3D\IView3DManager.cs" />
+    <Compile Include="Models\View3D\View3DManagerModel.cs" />
+    <Compile Include="ViewModels\BIM\BimStore3DViewModel.cs" />
+    <Compile Include="ViewModels\BIM\BimStoreItem3DViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\MaterialDispatcherWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Expression.Blend.Sdk.WPF">
+      <Version>1.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Extended.Wpf.Toolkit">
+      <Version>3.7.0</Version>
+    </PackageReference>
+    <PackageReference Include="Fluent.Ribbon">
+      <Version>7.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="HelixToolkit">
+      <Version>2.10.0</Version>
+    </PackageReference>
+    <PackageReference Include="HelixToolkit.Wpf.SharpDX">
+      <Version>2.10.0</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Prism.DryIoc" Version="7.2.0.1367" />
+    <PackageReference Include="Xbim.Common">
+      <Version>5.1.274</Version>
+    </PackageReference>
+    <PackageReference Include="Xbim.Essentials">
+      <Version>5.1.274</Version>
+    </PackageReference>
+    <PackageReference Include="Xbim.Geometry">
+      <Version>5.1.288</Version>
+    </PackageReference>
+    <PackageReference Include="Xbim.Ifc">
+      <Version>5.1.274</Version>
+    </PackageReference>
+    <PackageReference Include="Xbim.Ifc2x3">
+      <Version>5.1.274</Version>
+    </PackageReference>
+    <PackageReference Include="Xbim.Ifc4">
+      <Version>5.1.274</Version>
+    </PackageReference>
+    <PackageReference Include="Xbim.WindowsUI">
+      <Version>5.1.169</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\wireframe_off.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\wireframe_on.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ifc_format.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\document.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\vr.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\brush.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
